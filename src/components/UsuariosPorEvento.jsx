@@ -3,11 +3,14 @@ import { obtenerUsuariosPorEvento } from "../api/auth";
 import axiosClient from "../api/axiosClient";
 import toast from "react-hot-toast";
 import UsuarioRow from "./UsuarioRow";
-import { FileSpreadsheet, ArrowDownToLine } from "lucide-react";
+import ModalInvitadoEspecial from "../components/modals/ModalInvitadoEspecial";
+
+import { FileSpreadsheet, ArrowDownToLine, CirclePlus } from "lucide-react";
 import { data } from "autoprefixer";
 
 export default function UsuariosPorEvento({ eventoId }) {
   const [usuarios, setUsuarios] = useState([]);
+  const [modalAbierto, setModalAbierto] = useState(false);
   const [loading, setLoading] = useState(false);
   const [eventName, setEventName] = useState("");
 
@@ -49,6 +52,7 @@ export default function UsuariosPorEvento({ eventoId }) {
       const { data } = await obtenerUsuariosPorEvento(eventoId, params);
 
       setUsuarios(data.usuarios);
+      console.log(data.usuarios)
       setTotalPaginas(data.totalPages);
       setEventName(data.eventName)
     } catch (err) {
@@ -148,14 +152,33 @@ export default function UsuariosPorEvento({ eventoId }) {
           </select>
         </div>
 
+        <div className="flex gap-2 w-fit ">
+          <button
+            onClick={exportarCSV}
+            className="w-full flex  items-center gap-2 px-4 py-2 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-600 hover:text-white md:w-fit"
+          >
+            <ArrowDownToLine size={20} />
+            Exportar CSV
+          </button>
+          <button
+            onClick={() => setModalAbierto(true)}
+            className="w-full flex  items-center gap-2 px-4 py-2 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-600 hover:text-white md:w-fit"
+          >
+            <CirclePlus size={20} />
+            Agregar
+          </button>
+        </div>
 
-        <button
-          onClick={exportarCSV}
-          className="w-full flex  items-center gap-2 px-4 py-2 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-600 hover:text-white md:w-fit"
-        >
-          <ArrowDownToLine size={20} />
-          Exportar CSV
-        </button>
+
+        {modalAbierto && (
+          <ModalInvitadoEspecial
+            eventoId={eventoId}
+            onClose={() => setModalAbierto(false)}
+            onSuccess={cargarUsuarios} // para recargar la tabla
+          />
+        )}
+
+
       </div>
 
       {/* TABLA */}

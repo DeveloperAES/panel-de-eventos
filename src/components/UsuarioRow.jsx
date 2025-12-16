@@ -3,17 +3,17 @@ import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
 
 
-import { lazy, Suspense } from "react";
+// import { lazy, Suspense } from "react";
 
-const PDFDownloadLink = lazy(() =>
-  import("@react-pdf/renderer").then(m => ({
-    default: m.PDFDownloadLink
-  }))
-);
+// const PDFDownloadLink = lazy(() =>
+//   import("@react-pdf/renderer").then(m => ({
+//     default: m.PDFDownloadLink
+//   }))
+// );
 
-const TicketPDF = lazy(() =>
-  import("../components/ui/DocumentPDF")
-);
+// const TicketPDF = lazy(() =>
+//   import("../components/ui/DocumentPDF")
+// );
 
 
 
@@ -129,7 +129,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
               <Printer />
             </button> */}
             {/* zaza */}
-            <PDFDownloadLink
+            {/* <PDFDownloadLink
               document={<TicketPDF usuario={usuario} />}
               fileName={`Ticket_${nombres}_${apellidos}.pdf`}
             >
@@ -145,7 +145,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
                   </button>
                 )
               }
-            </PDFDownloadLink>
+            </PDFDownloadLink> */}
 
 
 

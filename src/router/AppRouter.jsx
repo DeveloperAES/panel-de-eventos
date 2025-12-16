@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import TicketPreview from "../pages/TicketPreview";
+// import TicketPreview from "../pages/TicketPreview";
 import AdminLayout from "../layouts/AdminLayout";
 
 function PrivateRoute({ children }) {
@@ -36,14 +36,14 @@ export default function AppRouter() {
         />
 
         {/* Vista de prueba PDF (PROTEGIDA) */}
-        <Route
+        {/* <Route
           path="/ticket-preview"
           element={
             <PrivateRoute>
               <TicketPreview />
             </PrivateRoute>
           }
-        />
+        /> */}
 
         {/* Dashboard protegido */}
         <Route

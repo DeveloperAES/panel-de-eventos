@@ -3,6 +3,10 @@ import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import TicketPDF from "../components/ui/DocumentPDF";
+
+
 import TicketTermico from "./TicketTermico";
 
 export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
@@ -107,22 +111,33 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
               {estado}
 
             </span>
-            <button
+            {/* <button
               onClick={handlePrint}
               className="flex items-center gap-2 text-[#49454F] cursor-pointer hover:text-[#14AE5C] transition-colors"
               title="Imprimir Ticket"
             >
               <Printer />
-            </button>
-
-            <button
-              onClick={() => {
-                window.open("/ticket-preview", "_blank");
-              }}
-              className="flex items-center gap-1 text-blue-600 hover:underline"
+            </button> */}
+            <PDFDownloadLink
+              document={<TicketPDF usuario={usuario} />}
+              fileName={`Ticket_${nombres}_${apellidos}.pdf`}
             >
-              PDF (htmldocs)
-            </button>
+              {({ loading }) =>
+                loading ? (
+                  <span className="text-gray-400">Generando...</span>
+                ) : (
+                  <button
+                    className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
+                    title="Descargar PDF"
+                  >
+                    <Printer />
+                  </button>
+                )
+              }
+            </PDFDownloadLink>
+
+
+
           </div>
         )}
       </td>

@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
-import { X } from "lucide-react";
+import { X, Printer } from "lucide-react";
 import toast from "react-hot-toast";
+import { useReactToPrint } from "react-to-print";
 
 import { ingresarAlEventoPorQR } from "../../api/eventos";
+import TicketTermico from "../TicketTermico";
 
 const LectorQR = ({ idUsuarioAdministrador, idEvento, isOpen, onClose, onSuccess }) => {
   const [resultado, setResultado] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [error, setError] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null);
+  const [usuarioData, setUsuarioData] = useState(null);
+  const ticketRef = useRef();
 
   const handleDecode = async (result) => {
     // El escáner puede devolver un objeto o un array
@@ -69,10 +73,11 @@ const LectorQR = ({ idUsuarioAdministrador, idEvento, isOpen, onClose, onSuccess
       
       console.log("📥 Respuesta del backend:", response.data);
 
-      const { ok, estado } = response.data;
+      const { ok, estado, usuario } = response.data;
 
       if (ok && estado === "ASISTENCIA_CONFIRMADA") {
         setResultado(estado);
+        setUsuarioData(usuario); // Guardar datos del usuario para el ticket
         toast.success("✅ Asistencia confirmada exitosamente");
         
         if (onSuccess) {
@@ -113,7 +118,15 @@ const LectorQR = ({ idUsuarioAdministrador, idEvento, isOpen, onClose, onSuccess
     setResultado(null);
     setError(null);
     setDebugInfo(null);
+    setUsuarioData(null);
   };
+
+  const handlePrint = useReactToPrint({
+    contentRef: ticketRef,
+    documentTitle: usuarioData 
+      ? `Ticket_${usuarioData.nombres}_${usuarioData.apellidos}`
+      : 'Ticket_Asistencia',
+  });
 
   const handleClose = () => {
     resetScanner();
@@ -124,7 +137,7 @@ const LectorQR = ({ idUsuarioAdministrador, idEvento, isOpen, onClose, onSuccess
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg mx-4 bg-white rounded-xl shadow-2xl p-6">
+      <div className="relative w-full max-w-lg mx-4 overflow-scroll  bg-white rounded-xl shadow-2xl p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold text-gray-800">
@@ -151,17 +164,39 @@ const LectorQR = ({ idUsuarioAdministrador, idEvento, isOpen, onClose, onSuccess
         {/* Resultado exitoso */}
         {resultado && (
           <div className="p-4 mb-4 bg-green-50 border-2 border-green-300 rounded-lg">
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-3">
               <span className="text-2xl">✅</span>
-              <div>
+              <div className="flex-1">
                 <p className="text-green-800 font-semibold text-lg">
                   ¡Asistencia confirmada!
                 </p>
-                <p className="text-green-700 text-sm">
+                <p className="text-green-700 text-sm mb-3">
                   El usuario ha ingresado al evento exitosamente
                 </p>
+                {usuarioData && (
+                  <div className="text-sm text-green-800 space-y-1 mb-3">
+                    <p><strong>Nombre:</strong> {usuarioData.nombres} {usuarioData.apellidos}</p>
+                    <p><strong>Empresa:</strong> {usuarioData.empresa}</p>
+                  </div>
+                )}
+                {usuarioData && (
+                  <button
+                    onClick={handlePrint}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  >
+                    <Printer size={18} />
+                    Imprimir Ticket
+                  </button>
+                )}
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Ticket oculto para impresión */}
+        {usuarioData && (
+          <div style={{ display: 'none' }}>
+            <TicketTermico ref={ticketRef} usuario={usuarioData} />
           </div>
         )}
 

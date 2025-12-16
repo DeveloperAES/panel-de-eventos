@@ -11,7 +11,6 @@ import { FileSpreadsheet, ArrowDownToLine, CirclePlus, QrCode } from "lucide-rea
 
 export default function UsuariosPorEvento({ eventoId }) {
   const { admin } = useContext(AuthContext);
-  console.log(admin);
   const [usuarios, setUsuarios] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modalQRAbierto, setModalQRAbierto] = useState(false);

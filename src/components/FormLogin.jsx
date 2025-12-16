@@ -50,7 +50,7 @@ export default function Login() {
     };
 
     return (
-        <section className="h-hull bg-gray-950  md:bg-white  ">
+        <section className="h-hull bg-white  ">
 
             <div className="w-full min-h-screen h-screen relative flex justify-center items-center p-6  z-1 dark:bg-gray-900 sm:p-0">
 
@@ -65,7 +65,7 @@ export default function Login() {
 
                             {/* DNI */}
                             <div>
-                                <label className="text-sm font-medium text-white md:text-gray-600">DNI <span className="text-red-500 text-sm font-semibold">*</span></label>
+                                <label className="text-sm font-medium text-gray-600">DNI <span className="text-red-500 text-sm font-semibold">*</span></label>
                                 <input
                                     type="text"
                                     placeholder="Escribe tu dni"
@@ -81,7 +81,7 @@ export default function Login() {
 
                             {/* PASSWORD con mostrar/ocultar */}
                             <div className="relative">
-                                <label className="text-sm font-medium text-white md:text-gray-600"> Contraseña <span className="text-red-500 text-sm font-semibold">*</span></label>
+                                <label className="text-sm font-medium text-gray-600"> Contraseña <span className="text-red-500 text-sm font-semibold">*</span></label>
 
                                 <input
                                     type={showPassword ? "text" : "password"}

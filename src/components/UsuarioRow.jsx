@@ -1,8 +1,6 @@
 
 import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
-
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import TicketPDF from "../components/ui/DocumentPDF";
 
@@ -42,10 +40,10 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
 
 
 
-  const handlePrint = useReactToPrint({
-    contentRef: ticketRef,
-    documentTitle: `Ticket_${nombres}_${apellidos}`,
-  });
+  // const handlePrint = useReactToPrint({
+  //   contentRef: ticketRef,
+  //   documentTitle: `Ticket_${nombres}_${apellidos}`,
+  // });
 
   return (
     <tr className="hover:bg-gray-100">

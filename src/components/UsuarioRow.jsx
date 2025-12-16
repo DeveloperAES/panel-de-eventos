@@ -3,8 +3,18 @@ import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import TicketPDF from "../components/ui/DocumentPDF";
+
+import { lazy, Suspense } from "react";
+
+const PDFDownloadLink = lazy(() =>
+  import("@react-pdf/renderer").then(m => ({
+    default: m.PDFDownloadLink
+  }))
+);
+
+const TicketPDF = lazy(() =>
+  import("../components/ui/DocumentPDF")
+);
 
 
 import TicketTermico from "./TicketTermico";
@@ -118,23 +128,25 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
             >
               <Printer />
             </button> */}
-            <PDFDownloadLink
-              document={<TicketPDF usuario={usuario} />}
-              fileName={`Ticket_${nombres}_${apellidos}.pdf`}
-            >
-              {({ loading }) =>
-                loading ? (
-                  <span className="text-gray-400">Generando...</span>
-                ) : (
-                  <button
-                    className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
-                    title="Descargar PDF"
-                  >
-                    <Printer />
-                  </button>
-                )
-              }
-            </PDFDownloadLink>
+            <Suspense fallback={<span className="text-gray-400">Cargando PDF...</span>}>
+              <PDFDownloadLink
+                document={<TicketPDF usuario={usuario} />}
+                fileName={`Ticket_${nombres}_${apellidos}.pdf`}
+              >
+                {({ loading }) =>
+                  loading ? (
+                    <span className="text-gray-400">Generando...</span>
+                  ) : (
+                    <button
+                      className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
+                      title="Descargar PDF"
+                    >
+                      <Printer />
+                    </button>
+                  )
+                }
+              </PDFDownloadLink>
+            </Suspense>
 
 
 

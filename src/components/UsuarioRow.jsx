@@ -116,6 +116,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
             >
               <Printer />
             </button> */}
+            {/* zaza */}
             <PDFDownloadLink
               document={<TicketPDF usuario={usuario} />}
               fileName={`Ticket_${nombres}_${apellidos}.pdf`}

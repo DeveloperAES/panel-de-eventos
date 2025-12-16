@@ -184,7 +184,7 @@ const TicketTermico = forwardRef(({ usuario }, ref) => {
           font-size: 9pt;
           margin-top: 12px;
           padding-top: 8px;
-          border-top: 2px dashed #000;
+          border-top: 2px dashed #fff;
         }
         
         .ticket-estado {
@@ -237,13 +237,13 @@ const TicketTermico = forwardRef(({ usuario }, ref) => {
       {qr_code_url && (
         <div className="ticket-qr flex flex-col justify-center items-center">
           <img src={qr_code_url} alt="Código QR" />
-          <div style={{ fontSize: '8pt', marginTop: '4px' }}>Escanea para verificar</div>
+          <div style={{ fontSize: '8pt', marginTop: '4px' }}>Marca tu salida</div>
         </div>
       )}
 
       <div className="ticket-footer">
         <div>Gracias por su asistencia</div>
-        <div style={{ marginTop: '4px' }}>www.tuempresa.com</div>
+        <div style={{ marginTop: '4px' }}>https://www.booombtl.com/</div>
       </div>
     </div>
   );

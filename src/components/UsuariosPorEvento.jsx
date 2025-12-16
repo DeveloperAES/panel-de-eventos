@@ -7,7 +7,7 @@ import ModalInvitadoEspecial from "../components/modals/ModalInvitadoEspecial";
 import LectorQR from "./ui/LectorQR";
 import { AuthContext } from "../context/AuthContext";
 
-import { FileSpreadsheet, ArrowDownToLine, CirclePlus, QrCode } from "lucide-react";
+import { FileSpreadsheet, ArrowDownToLine, CirclePlus, QrCode, Search } from "lucide-react";
 
 export default function UsuariosPorEvento({ eventoId }) {
   const { admin } = useContext(AuthContext);
@@ -148,7 +148,7 @@ export default function UsuariosPorEvento({ eventoId }) {
             onClick={() => setModalQRAbierto(true)}
             className="w-full flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 md:w-fit"
           >
-            <QrCode size={20}   />
+            <QrCode size={20} />
             Escanear QR
           </button>
         </div>
@@ -173,16 +173,23 @@ export default function UsuariosPorEvento({ eventoId }) {
 
       {/* 🔍 Filtros */}
       <div className="flex justify-between items-center flex-wrap gap-3 w-full px-4 py-2 bg-white border border-[rgba(74, 68, 88, 0.25)] rounded-xl ">
-        <div className="flex flex-wrap gap-3 justify-start items-center md:flex-nowrap">
-          <input
-            type="text"
-            placeholder="Buscar nombre"
-            className="border px-3 py-2 rounded w-full max-w-sm"
-            value={filtros.search}
-            onChange={(e) =>
-              setFiltros((f) => ({ ...f, search: e.target.value, page: 1 }))
-            }
-          />
+        <div className="w-full flex flex-wrap gap-3 justify-start items-center md:flex-nowrap">
+
+          <div className="w-full flex items-center relative">
+            <input
+              type="text"
+              placeholder="Buscar nombre, apellido o correo"
+              className="w-full border px-3 py-2 rounded relative"
+              value={filtros.search}
+              onChange={(e) =>
+                setFiltros((f) => ({ ...f, search: e.target.value, page: 1 }))
+              }
+            />
+            <Search   className="absolute right-2" size={20} />
+          </div>
+
+
+
 
           <select
             className="border  px-3 py-2 rounded w-full max-w-sm"

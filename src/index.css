@@ -19,6 +19,7 @@
   --font-regular: "Oufit-regular", sans-serif;
   --font-semibold: "Oufit-SemiBold", sans-serif;
   --color-gray-dark: #1a2231;
+  --color-blue-main: #1D2668;
 }
 
 main {
@@ -34,6 +35,14 @@ body {
 .color-gray{
   color:var(--color-gray-dark);
   font-family: var(--font-semibold);
+}
+
+.color-blue-main{
+  color: var(--color-blue-main);
+}
+
+.bg-blue-main{
+  background-color: var(--color-blue-main);
 }
 .font-semibold{
   font-family: var(--font-semibold);

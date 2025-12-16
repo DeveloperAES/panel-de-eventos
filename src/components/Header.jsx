@@ -19,7 +19,7 @@ export default function Header({ sidebarOpen, toggleSidebar }) {
   }, []);
 
   return (
-    <header className="bg-[#6C757D] border-b p-4 flex text-white  justify-between items-center gap-4 relative">
+    <header className="bg-blue-main border-b p-4 flex text-white  justify-between items-center gap-4 relative">
 
 
 

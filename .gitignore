@@ -11,6 +11,8 @@ lerna-debug.log*
 #Variables de entorno
 .env
 
+#Evitar subir fotos
+.kombai
 
 node_modules
 dist

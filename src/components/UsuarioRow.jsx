@@ -2,6 +2,7 @@
 import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+
 import TicketTermico from "./TicketTermico";
 
 export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
@@ -34,6 +35,8 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       hour12: true, // si quieres formato 12h con am/pm
     });
   }
+
+
 
   const handlePrint = useReactToPrint({
     contentRef: ticketRef,
@@ -110,6 +113,15 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
               title="Imprimir Ticket"
             >
               <Printer />
+            </button>
+
+            <button
+              onClick={() => {
+                window.open("/ticket-preview", "_blank");
+              }}
+              className="flex items-center gap-1 text-blue-600 hover:underline"
+            >
+              PDF (htmldocs)
             </button>
           </div>
         )}

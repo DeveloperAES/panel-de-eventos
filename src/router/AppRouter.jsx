@@ -1,10 +1,11 @@
-//Rutas + rutas protegidas
+// Rutas + rutas protegidas
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import TicketPreview from "../pages/TicketPreview";
 import AdminLayout from "../layouts/AdminLayout";
 
 function PrivateRoute({ children }) {
@@ -24,7 +25,7 @@ export default function AppRouter() {
         {/* Redirigir raíz → login */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Login (solo si no estás logueado) */}
+        {/* Login (solo si NO estás logueado) */}
         <Route
           path="/login"
           element={
@@ -34,7 +35,17 @@ export default function AppRouter() {
           }
         />
 
-        {/* Layout protegido */}
+        {/* Vista de prueba PDF (PROTEGIDA) */}
+        <Route
+          path="/ticket-preview"
+          element={
+            <PrivateRoute>
+              <TicketPreview />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Dashboard protegido */}
         <Route
           path="/dashboard"
           element={

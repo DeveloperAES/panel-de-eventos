@@ -2,27 +2,48 @@
 import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
 
-
-// import { lazy, Suspense } from "react";
-
-// const PDFDownloadLink = lazy(() =>
-//   import("@react-pdf/renderer").then(m => ({
-//     default: m.PDFDownloadLink
-//   }))
-// );
-
-// const TicketPDF = lazy(() =>
-//   import("../components/ui/DocumentPDF")
-// );
-
-
-
 import TicketTermico from "./TicketTermico";
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import TicketHTML from "../components/ui/TicketHTML";
+
+
+
 
 export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
   const ticketRef = useRef();
 
   const { registroId, nombres, apellidos, correo_corporativo, estado, empresa, fecha_registro, fecha_confirmacion, fecha_asistencia, qr_code_url } = usuario;
+  const descargarPDF = async () => {
+    const element = ticketRef.current;
+    if (!element) return;
+
+    const canvas = await html2canvas(element, {
+      scale: 2, // mejora calidad
+      useCORS: true,
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: [80, canvas.height * 80 / canvas.width],
+    });
+
+    pdf.addImage(
+      imgData,
+      "PNG",
+      0,
+      0,
+      80,
+      canvas.height * 80 / canvas.width
+    );
+
+    pdf.save(`Ticket_${usuario.nombres}.pdf`);
+  };
+
 
 
   function formatearFecha(fecha) {
@@ -121,31 +142,13 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
               {estado}
 
             </span>
-            {/* <button
-              onClick={handlePrint}
-              className="flex items-center gap-2 text-[#49454F] cursor-pointer hover:text-[#14AE5C] transition-colors"
-              title="Imprimir Ticket"
+            <button
+              onClick={descargarPDF}
+              className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
+              title="Descargar PDF"
             >
               <Printer />
-            </button> */}
-            {/* zaza */}
-            {/* <PDFDownloadLink
-              document={<TicketPDF usuario={usuario} />}
-              fileName={`Ticket_${nombres}_${apellidos}.pdf`}
-            >
-              {({ loading }) =>
-                loading ? (
-                  <span className="text-gray-400">Generando...</span>
-                ) : (
-                  <button
-                    className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
-                    title="Descargar PDF"
-                  >
-                    <Printer />
-                  </button>
-                )
-              }
-            </PDFDownloadLink> */}
+            </button>
 
 
 
@@ -154,9 +157,10 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       </td>
 
       {/* Componente oculto para impresión */}
-      <td style={{ display: 'none' }}>
-        <TicketTermico ref={ticketRef} usuario={usuario} />
-      </td>
+      {/* Ticket oculto */}
+      <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+        <TicketHTML ref={ticketRef} usuario={usuario} />
+      </div>
 
       {/* 
       <td className="border px-4 py-2">

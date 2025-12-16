@@ -1,8 +1,20 @@
 
 import { Check, Loader2, Printer } from "lucide-react";
 import { useRef } from "react";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import TicketPDF from "../components/ui/DocumentPDF";
+
+
+import { lazy, Suspense } from "react";
+
+const PDFDownloadLink = lazy(() =>
+  import("@react-pdf/renderer").then(m => ({
+    default: m.PDFDownloadLink
+  }))
+);
+
+const TicketPDF = lazy(() =>
+  import("../components/ui/DocumentPDF")
+);
+
 
 
 import TicketTermico from "./TicketTermico";

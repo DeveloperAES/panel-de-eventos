@@ -21,7 +21,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
 
 
   const ticketRef = useRef();
-  const descargarPDF = async () => {
+   const descargarPDF = async () => {
     if (descargando) return;
 
     const toastId = toast.loading("Generando ticket...");
@@ -54,7 +54,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
         (canvas.height * 150) / canvas.width
       );
 
-      // 👉 ABRIR EN NUEVA PESTAÑA
+     
       const blob = pdf.output("blob");
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
@@ -67,6 +67,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       setDescargando(false);
     }
   };
+
 
   function formatearFecha(fecha) {
     if (!fecha) return ""; // si es null, undefined o ""

@@ -1,10 +1,8 @@
 
 import { Check, Loader2, Printer } from "lucide-react";
-import { useRef } from "react";
-
-import TicketTermico from "./TicketTermico";
-
+import { useRef, useState } from "react";
 import jsPDF from "jspdf";
+import toast from "react-hot-toast";
 import html2canvas from "html2canvas";
 import TicketHTML from "../components/ui/TicketHTML";
 
@@ -12,38 +10,60 @@ import TicketHTML from "../components/ui/TicketHTML";
 
 
 export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
+
+
+  const { registroId, nombres, apellidos, correo_corporativo, estado, empresa, fecha_registro, fecha_confirmacion, fecha_asistencia, fecha_salida, porcentaje_participacion_evento, qr_code_url } = usuario;
+
+
+
+
+  const [descargando, setDescargando] = useState(false);
+
+
   const ticketRef = useRef();
-
-  const { registroId, nombres, apellidos, correo_corporativo, estado, empresa, fecha_registro, fecha_confirmacion, fecha_asistencia, qr_code_url } = usuario;
   const descargarPDF = async () => {
-    const element = ticketRef.current;
-    if (!element) return;
+    if (descargando) return;
 
-    const canvas = await html2canvas(element, {
-      scale: 2, // mejora calidad
-      useCORS: true,
-    });
+    const toastId = toast.loading("Generando ticket...");
 
-    const imgData = canvas.toDataURL("image/png");
+    try {
+      setDescargando(true);
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: [80, canvas.height * 80 / canvas.width],
-    });
+      const element = ticketRef.current;
+      if (!element) throw new Error("Ticket no encontrado");
 
-    pdf.addImage(
-      imgData,
-      "PNG",
-      0,
-      0,
-      80,
-      canvas.height * 80 / canvas.width
-    );
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+      });
 
-    pdf.save(`Ticket_${usuario.nombres}.pdf`);
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [150, (canvas.height * 350) / canvas.width],
+      });
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        10,
+        50,
+        80,
+        (canvas.height * 80) / canvas.width
+      );
+
+      pdf.save(`Ticket_${nombres}.pdf`);
+
+      toast.success("Ticket descargado", { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al generar el PDF", { id: toastId });
+    } finally {
+      setDescargando(false);
+    }
   };
-
 
 
   function formatearFecha(fecha) {
@@ -90,7 +110,12 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       <td className="border-0 border-b border-[#CAC4D0]  px-4 py-2">{formatearFecha(fecha_registro)}</td>
       <td className="border-0 border-b border-[#CAC4D0] px-4 py-2">{formatearFecha(fecha_confirmacion)}</td>
       <td className="border-0 border-b border-[#CAC4D0] px-4 py-2">{formatearFechaHora(fecha_asistencia)}</td>
-      <td className="border-0 border-b  border-[#CAC4D0] px-4 py-2">{formatearFechaHora(fecha_asistencia)}</td>
+      <td className="border-0 border-b  border-[#CAC4D0] px-4 py-2">{formatearFechaHora(fecha_salida)}</td>
+      <td>
+        {porcentaje_participacion_evento !== null
+          ? `${porcentaje_participacion_evento}%`
+          : '-'}
+      </td>
       {/* <td className="border px-4 py-2">
         {estado === "registrado" ? (
           <div className="flex items-center gap-2">
@@ -144,11 +169,17 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
             </span>
             <button
               onClick={descargarPDF}
-              className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C]"
+              disabled={descargando}
+              className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C] disabled:opacity-50"
               title="Descargar PDF"
             >
-              <Printer />
+              {descargando ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Printer />
+              )}
             </button>
+
 
 
 

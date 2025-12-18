@@ -25,10 +25,19 @@ export default function Header({ sidebarOpen, toggleSidebar }) {
 
       {/* BUSCADOR */}
       <div className="flex justify-start items-center gap-4 flex-1 max-w-xl ">
+
+        <button
+          onClick={toggleSidebar}
+          className="flex p-2 hover:bg-gray-200 rounded md:hidden"
+        >
+          <Menu size={22} />
+        </button>
+
         {/* Título */}
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-sm font-bold md:text-2xl">
           BOOOM EVENTOS
         </h2>
+
 
         <div className="hidden w-100 relative">
           <input
@@ -47,7 +56,7 @@ export default function Header({ sidebarOpen, toggleSidebar }) {
       <div className="relative flex gap-2 items-center" ref={menuRef}>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex items-center gap-2 bg-white rounded-full px-3 py-1 hover:bg-gray-300 focus:outline-none"
+          className=" flex items-center gap-2 bg-white rounded-full px-3 py-1 hover:bg-gray-300 focus:outline-none"
           aria-haspopup="true"
           aria-expanded={menuOpen}
         >

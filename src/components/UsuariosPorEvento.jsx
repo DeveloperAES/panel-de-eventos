@@ -17,6 +17,8 @@ export default function UsuariosPorEvento({ eventoId }) {
   const [loading, setLoading] = useState(false);
   const [eventName, setEventName] = useState("");
 
+
+
   //  Filtros
   const [filtros, setFiltros] = useState({
     search: "",
@@ -67,15 +69,24 @@ export default function UsuariosPorEvento({ eventoId }) {
 
   // ✔ Confirma un registro y recarga tabla
   const confirmarRegistro = async (id) => {
+    const toastId = toast.loading("Confirmando registro...");
+
     try {
       setConfirmandoId(id);
+
       await axiosClient.put(`/registros/${id}/confirmar`);
-      toast.success("Registro confirmado");
 
-      cargarUsuarios(); // recargar con filtros
+      toast.success("Registro confirmado", {
+        id: toastId,
+      });
 
-    } catch {
-      toast.error("Error al confirmar");
+      await cargarUsuarios(); // recargar con filtros
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Error al confirmar", {
+        id: toastId,
+      });
     } finally {
       setConfirmandoId(null);
     }
@@ -120,38 +131,61 @@ export default function UsuariosPorEvento({ eventoId }) {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4  overflow-hidden p-4 md:ml-24">
-      <div className="w-full flex flex-col justify-between gap-3 md:flex-row">
-        <h3 className="mb-4 font-semibold text-lg">
+    <div className=" w-full flex flex-col gap-4  overflow-hidden p-4 md:ml-24">
+      <div className="w-full flex flex-col justify-between gap-3 xl:flex-row">
+        <h3 className="text-center mb-4 font-semibold w-full text-lg md:text-start">
           Usuarios del evento <span className="hidden">{eventoId}</span> <span>
             {eventName}
           </span>
         </h3>
 
-        <div className="flex gap-2 w-fit ">
+        <div className="fixed bottom-0 flex gap-2   justify-end items-center w-full md:relative">
+          {/* EXPORTAR CSV (solo icono en mobile) */}
           <button
             onClick={exportarCSV}
-            className="w-full flex  items-center gap-2 px-4 py-2 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-600 hover:text-white md:w-fit"
+            className="
+      flex items-center justify-center gap-2
+      p-2 md:px-4 md:py-2
+      border border-[#1D2668] text-[#1D2668]
+      rounded hover:bg-[#1D2668] hover:text-white
+      md:w-fit
+    "
           >
             <ArrowDownToLine size={20} />
-            Exportar CSV
-          </button>
-          <button
-            onClick={() => setModalAbierto(true)}
-            className="w-full flex items-center gap-2 px-4 py-2 border border-emerald-600 text-emerald-600 rounded hover:bg-emerald-600 hover:text-white md:w-fit"
-          >
-            <CirclePlus size={20} />
-            Agregar
+            <span className="hidden md:inline">Exportar CSV</span>
           </button>
 
+          {/* AGREGAR (solo icono en mobile) */}
+          <button
+            onClick={() => setModalAbierto(true)}
+            className="
+      flex items-center justify-center gap-2
+      p-2 md:px-4 md:py-2
+      border border-[#1D2668] text-[#1D2668]
+      rounded hover:bg-[#1D2668] hover:text-white
+      md:w-fit
+    "
+          >
+            <CirclePlus size={20} />
+            <span className="hidden md:inline">Agregar</span>
+          </button>
+
+          {/* ESCANEAR QR (SIEMPRE visible el texto) */}
           <button
             onClick={() => setModalQRAbierto(true)}
-            className="w-full flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 md:w-fit"
+            className="
+      flex items-center justify-center gap-2
+      px-4 py-2 w-full md:w-fit
+      bg-[#1D2668] text-white
+      rounded hover:bg-[#161e55]
+    "
           >
             <QrCode size={20} />
-            Escanear QR
+            <span>Escanear QR</span>
           </button>
         </div>
+
+
 
         {modalAbierto && (
           <ModalInvitadoEspecial
@@ -185,7 +219,7 @@ export default function UsuariosPorEvento({ eventoId }) {
                 setFiltros((f) => ({ ...f, search: e.target.value, page: 1 }))
               }
             />
-            <Search   className="absolute right-2" size={20} />
+            <Search className="absolute right-2" size={20} />
           </div>
 
 
@@ -230,6 +264,7 @@ export default function UsuariosPorEvento({ eventoId }) {
                 <th className="border-0 border-b  border-[#CAC4D0] px-4 py-2">Fecha de <br /> Confirmación</th>
                 <th className="border-0 border-b border-[#CAC4D0] px-4 py-2">Hora de <br />asistencia</th>
                 <th className="border-0 border-b border-[#CAC4D0] px-4 py-2">Hora de salida</th>
+                <th className="border-0 border-b border-[#CAC4D0] px-4 py-2">% de participación</th>
                 <th className="border-0 border-b  border-[#CAC4D0] border-l px-4 py-2 bg-white sticky right-0 z-20">
                   Estado
                 </th>
@@ -246,12 +281,14 @@ export default function UsuariosPorEvento({ eventoId }) {
                 />
               ))}
             </tbody>
+
           </table>
         </div>
       )}
 
       {/* PAGINACIÓN */}
-      <div className="flex justify-center items-center gap-4 mt-4">
+      <div className="mb-[2rem] md:mt-4 flex justify-center items-center gap-4">
+
         <button
           disabled={filtros.page === 1}
           onClick={() =>
@@ -259,7 +296,7 @@ export default function UsuariosPorEvento({ eventoId }) {
           }
           className="px-3 py-1 border rounded disabled:opacity-50"
         >
-          ← Anterior
+          ←
         </button>
 
         <span>Página {filtros.page} de {totalPaginas}</span>
@@ -271,7 +308,7 @@ export default function UsuariosPorEvento({ eventoId }) {
           }
           className="px-3 py-1 border rounded disabled:opacity-50"
         >
-          Siguiente →
+          →
         </button>
       </div>
     </div>

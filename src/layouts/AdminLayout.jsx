@@ -44,7 +44,7 @@ export default function AdminLayout({ children }) {
 
 
       {/* CONTENIDO */}
-      <main className="flex gap-3  min-h-[calc(100vh-73px)] bg-[#F4F4F4] p-4">
+      <main className="p-0 flex gap-3  min-h-[calc(100vh-73px)] bg-[#F4F4F4]">
         {/* SIDEBAR */}
         <Sidebar
           toggleSidebar={() => setSidebarOpen(!sidebarOpen)}

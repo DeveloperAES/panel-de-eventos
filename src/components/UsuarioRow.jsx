@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import jsPDF from "jspdf";
 import toast from "react-hot-toast";
 import html2canvas from "html2canvas";
-import TicketHTML from "../components/ui/TicketHTML";
+// import TicketHTML from "../components/ui/TicketHTML";
 
 
 
@@ -19,52 +19,136 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
 
   const [descargando, setDescargando] = useState(false);
 
+  // const descargarPDF = async () => {
+  //   if (descargando) return;
 
-  const ticketRef = useRef();
-   const descargarPDF = async () => {
-    if (descargando) return;
+  //   const toastId = toast.loading("Generando gafete...");
 
-    const toastId = toast.loading("Generando ticket...");
+  //   try {
+  //     setDescargando(true);
+
+  //     const anchoMM = 60;  // puedes cambiar entre 58 o 80
+  //     const altoMM = 80;
+
+  //     const doc = new jsPDF({
+  //       orientation: "portrait",
+  //       unit: "mm",
+  //       format: [anchoMM, altoMM],
+  //     });
+
+  //     // Marco
+  //     doc.setLineWidth(0.4);
+  //     doc.rect(1, 1, anchoMM - 2, altoMM - 2);
+
+  //     // Header Evento
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.text("EVENTO", anchoMM / 2, 12, { align: "center" });
+
+  //     // Nombre completo
+  //     const nombreCompleto = `${nombres} ${apellidos}`;
+
+  //     doc.setFontSize(13);
+  //     doc.text(nombreCompleto, anchoMM / 2, 28, { align: "center" });
+
+  //     // Empresa
+  //     if (empresa) {
+  //       doc.setFontSize(10);
+  //       doc.text(empresa, anchoMM / 2, 35, { align: "center" });
+  //     }
+
+  //     // QR =====================================================
+  //     const img = new Image();
+  //     img.crossOrigin = "anonymous";
+  //     img.src = qr_code_url;
+
+  //     await new Promise((resolve, reject) => {
+  //       img.onload = resolve;
+  //       img.onerror = reject;
+  //     });
+
+  //     const qrSize = anchoMM * 0.55;
+  //     const qrX = (anchoMM - qrSize) / 2;
+
+  //     doc.addImage(img, "PNG", qrX, 40, qrSize, qrSize);
+
+  //     // ID
+  //     doc.setFontSize(9);
+  //     doc.text(`ID: ${registroId}`, anchoMM / 2, altoMM - 8, { align: "center" });
+
+  //     // Abrir PDF (ideal tablet)
+  //     const blobUrl = doc.output("bloburl");
+  //     window.open(blobUrl, "_blank");
+
+  //     toast.success("Gafete generado correctamente", { id: toastId });
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Error al generar PDF", { id: toastId });
+  //   } finally {
+  //     setDescargando(false);
+  //   }
+  // };
+
+  const generarGafeteThermal = async (anchoMM) => {
+    const altoMM = 100;
+
+    const cargarImagen = (src) =>
+      new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
 
     try {
-      setDescargando(true);
-
-      const element = ticketRef.current;
-      if (!element) throw new Error("Ticket no encontrado");
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
+      const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: [150, (canvas.height * 150) / canvas.width],
+        format: [anchoMM, altoMM],
       });
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        0,
-        150,
-        (canvas.height * 150) / canvas.width
-      );
+      doc.setLineWidth(0.3);
+      doc.rect(1, 1, anchoMM - 2, altoMM - 2);
 
-     
-      const blob = pdf.output("blob");
-      const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
+      // HEADER (EMPRESA/EVENTO)
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text(empresa || "EVENTO", anchoMM / 2, 10, { align: "center" });
 
-      toast.success("Ticket generado", { id: toastId });
-    } catch (error) {
-      console.error(error);
-      toast.error("Error al generar el PDF", { id: toastId });
-    } finally {
-      setDescargando(false);
+      // NOMBRE COMPLETO
+      const nombreCompleto = `${nombres ?? ""} ${apellidos ?? ""}`.trim();
+      doc.setFontSize(12);
+      doc.text(nombreCompleto || "SIN NOMBRE", anchoMM / 2, 28, {
+        align: "center",
+      });
+
+      // TEXTO SECUNDARIO
+      doc.setFontSize(11);
+      doc.text("INVITADO", anchoMM / 2, 35, { align: "center" });
+
+      // QR
+      try {
+        const img = await cargarImagen(qr_code_url);
+        const qrSize = anchoMM * 0.6;
+        const qrX = (anchoMM - qrSize) / 2;
+        doc.addImage(img, "PNG", qrX, 40, qrSize, qrSize);
+      } catch (e) {
+        console.warn("QR no cargó", e);
+      }
+
+      // ID
+      doc.setFontSize(9);
+      doc.text(`ID: ${registroId}`, anchoMM / 2, altoMM - 8, {
+        align: "center",
+      });
+
+      // Abrir PDF (ideal tablet)
+      const blobUrl = doc.output("bloburl");
+      window.open(blobUrl, "_blank");
+    } catch (err) {
+      console.error(err);
+      alert("Error generando PDF");
     }
   };
 
@@ -171,7 +255,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
 
             </span>
             <button
-              onClick={descargarPDF}
+              onClick={() => generarGafeteThermal(58)}   // ⭐ 58mm térmica
               disabled={descargando}
               className="flex items-center gap-2 text-[#49454F] hover:text-[#14AE5C] disabled:opacity-50"
               title="Descargar PDF"
@@ -186,15 +270,17 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
 
 
 
+
+
           </div>
         )}
       </td>
 
       {/* Componente oculto para impresión */}
       {/* Ticket oculto */}
-      <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+      {/* <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
         <TicketHTML ref={ticketRef} usuario={usuario} />
-      </div>
+      </div> */}
 
       {/* 
       <td className="border px-4 py-2">

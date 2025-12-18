@@ -32,34 +32,34 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       const element = ticketRef.current;
       if (!element) throw new Error("Ticket no encontrado");
 
-      // const canvas = await html2canvas(element, {
-      //   scale: 2,
-      //   useCORS: true,
-      // });
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+      });
 
+      const imgData = canvas.toDataURL("image/png");
 
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [150, (canvas.height * 150) / canvas.width],
+      });
 
-      // const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        150,
+        (canvas.height * 150) / canvas.width
+      );
 
+      // 👉 ABRIR EN NUEVA PESTAÑA
+      const blob = pdf.output("blob");
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
 
-      // const pdf = new jsPDF({
-      //   orientation: "portrait",
-      //   unit: "mm",
-      //   format: [150, (canvas.height * 350) / canvas.width],
-      // });
-
-      // pdf.addImage(
-      //   imgData,
-      //   "PNG",
-      //   10,
-      //   50,
-      //   80,
-      //   (canvas.height * 80) / canvas.width
-      // );
-
-      // pdf.save(`Ticket_${nombres}.pdf`);
-
-      toast.success("Ticket descargado", { id: toastId });
+      toast.success("Ticket generado", { id: toastId });
     } catch (error) {
       console.error(error);
       toast.error("Error al generar el PDF", { id: toastId });
@@ -67,7 +67,6 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       setDescargando(false);
     }
   };
-
 
   function formatearFecha(fecha) {
     if (!fecha) return ""; // si es null, undefined o ""

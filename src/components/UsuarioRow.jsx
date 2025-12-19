@@ -198,7 +198,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
       <td className="border-0 border-b border-[#CAC4D0] px-4 py-2">{formatearFecha(fecha_confirmacion)}</td>
       <td className="border-0 border-b border-[#CAC4D0] px-4 py-2">{formatearFechaHora(fecha_asistencia)}</td>
       <td className="border-0 border-b  border-[#CAC4D0] px-4 py-2">{formatearFechaHora(fecha_salida)}</td>
-      <td>
+      <td className="border-0 border-b  border-[#CAC4D0] px-4 py-2">
         {porcentaje_participacion_evento !== null
           ? `${porcentaje_participacion_evento}%`
           : '-'}

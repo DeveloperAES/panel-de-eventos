@@ -13,7 +13,7 @@ export default function Sidebar({
 }) {
   const [openEventos, setOpenEventos] = useState(false);
 
-  // 🔒 Bloquear scroll SOLO en mobile
+  // Bloquear scroll SOLO en mobile
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
 
@@ -46,12 +46,12 @@ export default function Sidebar({
           z-50
 
           fixed top-0 left-0
-          w-78
+          w-64
           ${expanded ? "translate-x-0" : "-translate-x-full"}
 
           md:static md:translate-x-0
           md:rounded-xl 
-          md:${expanded ? "w-78" : "w-20"}
+          md:${expanded ? "w-78" : "w-64"}
         `}
       >
         {/* BOTÓN SIDEBAR */}
@@ -69,7 +69,7 @@ export default function Sidebar({
         >
           <div className="flex items-center space-x-2">
             <SlEvent />
-            {expanded && <span>Mis eventos</span>}
+            {expanded && <span className="flex text-nowrap">Mis eventos</span>}
           </div>
 
           {expanded && (

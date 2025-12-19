@@ -4,10 +4,13 @@ export default function Dashboard() {
   return (
     <div className="ml-0 p-4 text-2xl font-bold md:ml-24">
       Bienvenido al panel de administración de BOOOM EVENTOS
+      <div className="w-full flex justify-center gap-3 flex-wrap">
 
-    <GafetePrueba />
+        <GafetePrueba />
 
-    <GafetePdfDemo />
+        <GafetePdfDemo />
+      </div>
+
     </div>
   );
 }

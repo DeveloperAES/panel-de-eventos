@@ -10,7 +10,7 @@ export default function AdminLayout({ children }) {
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [eventoActivo, setEventoActivo] = useState(null);
+
 
 
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null);

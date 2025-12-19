@@ -7,14 +7,14 @@ export default function GafetePrueba() {
   const imprimir = () => window.print();
 
   return (
-    <>
+    <div className="flex flex-col gap-2 items-center">
       {/* ESTILOS INTERNOS */}
       <style>
         {`
         /* Contenedor general del gafete en pantalla */
         #gafete-print-root {
-          width: 100vw;
-          height: 100vh;
+          // width: 100vw;
+          // height: 100vh;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -61,15 +61,7 @@ export default function GafetePrueba() {
           object-fit: contain;
         }
 
-        .actions {
-          position: fixed;
-          bottom: 16px;
-          left: 0;
-          right: 0;
-          display: flex;
-          justify-content: center;
-          gap: 8px;
-        }
+      
 
         .actions button {
           padding: 8px 16px;
@@ -140,9 +132,9 @@ export default function GafetePrueba() {
       </div>
 
       {/* Botones solo para pantalla */}
-      <div className="actions">
+      <div className="actions w-full flex justify-center">
         <button onClick={imprimir}>Imprimir gafete</button>
       </div>
-    </>
+    </div>
   );
 }

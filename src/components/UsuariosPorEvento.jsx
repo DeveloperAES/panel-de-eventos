@@ -46,9 +46,9 @@ export default function UsuariosPorEvento({ eventoId }) {
       };
 
       if (filtros.search.trim()) {
-        params.nombre = filtros.search;
-        params.correo = filtros.search;
+        params.search = filtros.search.trim(); // 🔹 ahora solo un parámetro
       }
+
 
       if (filtros.estado) {
         params.estado = filtros.estado;

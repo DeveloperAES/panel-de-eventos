@@ -61,7 +61,7 @@ export default function GafeteThermalDemo() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        
         padding: 24,
         display: "flex",
         flexDirection: "column",

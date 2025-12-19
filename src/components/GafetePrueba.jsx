@@ -1,15 +1,8 @@
-import React from "react";
-
-const QR_URL =
-  "https://xplorabob.blob.core.windows.net/blob-eventos/qr_34320f0d-0845-4c50-827d-9ad372b8b807.png";
-
-export default function GafetePrueba() {
-  const imprimir = () => window.print();
-
+export default function GafetePrueba({ nombre, cargo, empresa, qr, id }) {
   return (
-    <div className="flex flex-col gap-2 items-center">
-      {/* ESTILOS INTERNOS */}
-      <style>
+    <div id="gafete-print-root">
+
+        <style>
         {`
         /* Contenedor general del gafete en pantalla */
         #gafete-print-root {
@@ -61,7 +54,15 @@ export default function GafetePrueba() {
           object-fit: contain;
         }
 
-      
+        .actions {
+          position: fixed;
+          bottom: 16px;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+        }
 
         .actions button {
           padding: 8px 16px;
@@ -94,7 +95,7 @@ export default function GafetePrueba() {
           }
 
           /* 3) Centra el gafete en la hoja */
-          #gafete-print-root {
+          #gafete-print-root {  
             position: fixed;
             inset: 0;
             display: flex;
@@ -110,30 +111,21 @@ export default function GafetePrueba() {
         }
       `}
       </style>
+      <div className="gafete">
+        <div className="gafete-header">{empresa || "EVENTO DEMO"}</div>
 
-      {/* SOLO ESTE DIV SE IMPRIME */}
-      <div id="gafete-print-root">
-        <div className="gafete">
-          <div className="gafete-header">EVENTO DEMO</div>
-
-          <div>
-            <div className="gafete-nombre">Juan Pérez</div>
-            <div className="gafete-rol">INVITADO</div>
-          </div>
-
-          <div className="gafete-qr">
-            <img src={QR_URL} alt="Código QR de acceso" />
-          </div>
-
-          <div style={{ fontSize: "10px", marginTop: "2mm" }}>
-            ID: DEMO-001
-          </div>
+        <div>
+          <div className="gafete-nombre">{nombre}</div>
+          <div className="gafete-rol">{cargo || "INVITADO"}</div>
         </div>
-      </div>
 
-      {/* Botones solo para pantalla */}
-      <div className="actions w-full flex justify-center">
-        <button onClick={imprimir}>Imprimir gafete</button>
+        <div className="gafete-qr">
+          <img src={qr} alt="Código QR de acceso" />
+        </div>
+
+        <div style={{ fontSize: "10px", marginTop: "2mm" }}>
+          ID: {id}
+        </div>
       </div>
     </div>
   );

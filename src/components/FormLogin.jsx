@@ -55,7 +55,7 @@ export default function Login() {
                     <div className="max-w-md flex flex-col gap-5 justify-center items-center">
 
                         <div className="flex flex-col">
-                            <h2 className="text-2xl md:text-4xl text-gray-800">
+                            <h2 className="text-2xl text-center md:text-4xl text-gray-800">
                                 Iniciar sesión
                             </h2>
                             <p className="text-center text-gray-400">

@@ -142,7 +142,8 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
           : '-'}
       </td>
 
-      <td className="border-0 border-b border-l border-[#CAC4D0] px-4 py-2 bg-white sticky right-0 z-10">
+
+      <td className="border-0 border-b border-l border-[#CAC4D0] px-6 py-2 bg-white sticky right-0 z-10">
         {estado === "registrado" ? (
           <select
             className="border-0  px-2 py-1 rounded bg-[#EBFFEE]"
@@ -197,6 +198,7 @@ export default function UsuarioRow({ usuario, confirmandoId, onConfirmar }) {
               empresa={empresa}
               qr={qr_code_url}
               id={registroId}
+              cargo = {cargo}
             />
           </div>
         </div>

@@ -45,10 +45,9 @@ export default function UsuariosPorEvento({ eventoId }) {
         limit: filtros.limit,
       };
 
-      if (filtros.search.trim()) {
-        params.search = filtros.search.trim(); // 🔹 ahora solo un parámetro
+      if (filtros.search?.trim()) {
+        params.search = filtros.search.trim();
       }
-
 
       if (filtros.estado) {
         params.estado = filtros.estado;
@@ -57,9 +56,8 @@ export default function UsuariosPorEvento({ eventoId }) {
       const { data } = await obtenerUsuariosPorEvento(eventoId, params);
 
       setUsuarios(data.usuarios);
-      console.log(data.usuarios)
       setTotalPaginas(data.totalPages);
-      setEventName(data.eventName)
+      setEventName(data.eventName);
     } catch (err) {
       toast.error("Error al cargar usuarios");
     } finally {
@@ -145,7 +143,9 @@ export default function UsuariosPorEvento({ eventoId }) {
             onClick={exportarCSV}
             className="
       flex items-center justify-center gap-2
+      text-xs
       p-2 md:px-4 md:py-2
+        md:text-base
       border border-[#1D2668] text-[#1D2668]
       rounded hover:bg-[#1D2668] hover:text-white
       md:w-fit
@@ -160,7 +160,9 @@ export default function UsuariosPorEvento({ eventoId }) {
             onClick={() => setModalAbierto(true)}
             className="
       flex items-center justify-center gap-2
+        text-xs
       p-2 md:px-4 md:py-2
+        md:text-base
       border border-[#1D2668] text-[#1D2668]
       rounded hover:bg-[#1D2668] hover:text-white
       md:w-fit
@@ -174,8 +176,9 @@ export default function UsuariosPorEvento({ eventoId }) {
           <button
             onClick={() => setModalQRAbierto(true)}
             className="
-      flex items-center justify-center gap-2
+      flex items-center justify-center gap-2   text-xs
       px-4 py-2 w-full md:w-fit
+    md:text-base
       bg-[#1D2668] text-white
       rounded hover:bg-[#161e55]
     "

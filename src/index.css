@@ -67,12 +67,12 @@ body {
 }
 
 .wrapper-table::-webkit-scrollbar-thumb {
-  background: #4f46e5; /* color del scroll */
+  background: var(--color-blue-main); /* color del scroll */
   border-radius: 4px;
 }
 
 .wrapper-table::-webkit-scrollbar-thumb:hover {
-  background: #4338ca; /* hover */
+  background: var(--color-blue-main); /* hover */
 }
 
 .tableUsers td{

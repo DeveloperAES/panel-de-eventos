@@ -94,7 +94,7 @@ export default function Sidebar({
                     hover:bg-[#F4F4F4]
                     ${
                       eventoActivo === e.id
-                        ? "bg-[#E3F2FD] font-semibold text-blue-700"
+                        ? "bg-[#E3F2FD] font-semibold text-[#1D2668]"
                         : ""
                     }
                   `}
